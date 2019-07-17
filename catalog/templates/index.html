@@ -1,5 +1,11 @@
 {% extends 'base_generic.html' %}
 
+
+{% block title %}
+    <title>Welcome home</title>
+{% endblock %}
+
+
 {% block content %}
     <h1>Local Library Home</h1>
     <p>Welcome to LocalLibrary, a websites developed by <em>MDN</em> and me (@mxmgny)</p>
@@ -10,6 +16,8 @@
         <li><strong>Copies:</strong>{{ num_instances }}</li>
         <li><strong>Copies available:</strong>{{ num_instances_available }}</li>
         <li><strong>Authors:</strong>{{ num_authors }}</li>
+        <li><strong>Book's name contain 'war' :</strong>{{ num_books_war}}</li>
+        <li><strong>Genres contain 'novel' :</strong>{{ num_genre_novel}}</li>
     </ul>
 {% load static %}
 <img src="{% static 'images/basic-django.png' %}" alt="basic-django project" style="width:555px;height:540px;">
