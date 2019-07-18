@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Book, BookInstance, Author, Genre
+from django.views.generic import ListView
 
 # Create your views here.
 
@@ -7,11 +8,8 @@ from .models import Book, BookInstance, Author, Genre
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
-
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
-
     num_authors = Author.objects.count()
-
     num_genre_novel = Genre.objects.filter(name__icontains='novel').count()
     num_books_war = Book.objects.filter(title__icontains='war').count()
 
@@ -25,3 +23,9 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+class BookListView(ListView):
+    """ View to display all the books in library """
+    model = Book
+
