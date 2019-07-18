@@ -42,3 +42,8 @@ class AuthorListView(ListView):
     model = Author
     paginate_by = 5
     template_name = 'catalog/author_list.html'
+
+
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = 'catalog/author_detail.html'
