@@ -37,3 +37,8 @@ class BookDetailView(DetailView):
     model = Book
     template_name = 'catalog/book_detail.html'
 
+
+class AuthorListView(ListView):
+    model = Author
+    paginate_by = 5
+    template_name = 'catalog/author_list.html'
