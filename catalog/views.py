@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Book, BookInstance, Author, Genre
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 # Create your views here.
 
@@ -22,10 +22,18 @@ def index(request):
         'num_books_war': num_books_war,
     }
 
-    return render(request, 'index.html', context=context)
+    return render(request, 'catalog/index.html', context=context)
 
 
 class BookListView(ListView):
     """ View to display all the books in library """
     model = Book
+    template_name = 'catalog/book_list.html'
+    paginate_by = 5
+
+
+class BookDetailView(DetailView):
+    """View to display book detail information and book instances"""
+    model = Book
+    template_name = 'catalog/book_detail.html'
 
