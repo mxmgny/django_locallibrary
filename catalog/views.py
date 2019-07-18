@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Book, BookInstance, Author, Genre
 from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # Create your views here.
 
@@ -13,7 +13,7 @@ def index(request):
     num_authors = Author.objects.count()
     num_genre_novel = Genre.objects.filter(name__icontains='novel').count()
     num_books_war = Book.objects.filter(title__icontains='war').count()
-
+    print(request.user.get_all_permissions())
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits+1
 
@@ -24,7 +24,7 @@ def index(request):
         'num_authors': num_authors,
         'num_genre_novel': num_genre_novel,
         'num_books_war': num_books_war,
-        'num_visits':num_visits
+        'num_visits': num_visits
     }
 
     return render(request, 'catalog/index.html', context=context)
@@ -64,3 +64,14 @@ class LoanedBooksByUserListView(LoginRequiredMixin, ListView):
         return BookInstance.objects.filter(borrower=self.request.user)\
             .filter(status__exact='o')\
             .order_by('due_back')
+
+
+class LoanedBooksStuffListView(PermissionRequiredMixin, ListView):
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_stuff.html'
+    paginate_by = 10
+    permission_required = 'catalog.can_mark_returned'
+
+    def get_queryset(self):
+        return BookInstance.objects.all().filter(status__exact='o').order_by('due_back')
+
