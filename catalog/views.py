@@ -43,6 +43,9 @@ class BookListView(ListView):
     template_name = 'catalog/book_list.html'
     paginate_by = 5
 
+    def get_queryset(self):
+        return Book.objects.all().order_by('title')
+
 
 class BookDetailView(DetailView):
     """View to display book detail information and book instances"""
@@ -108,6 +111,7 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context=context)
 
 
+# Author view templates
 class AuthorCreate(PermissionRequiredMixin ,CreateView):
     model = Author
     fields = '__all__'
@@ -126,3 +130,23 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
     permission_required = 'catalog.can_mark_returned'
     model = Author
     success_url = reverse_lazy('authors')
+
+
+# Book view templates
+class BookCreate(PermissionRequiredMixin ,CreateView):
+    model = Book
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+    permission_required = 'catalog.can_mark_returned'
+
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
+
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Book
+    success_url = reverse_lazy('books')
